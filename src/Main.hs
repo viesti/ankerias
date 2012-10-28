@@ -28,10 +28,10 @@ switchHandler = do
 data SwitchState = On | Off
 
 switch :: MonadSnap m => SwitchState -> m ()
-switch On = switchAndPrint "date"
-switch Off = switchAndPrint "ls"
+switch On = switchAndPrint "--on"
+switch Off = switchAndPrint "--off"
 
 switchAndPrint :: MonadSnap m => String -> m ()
 switchAndPrint s = do
-  out <- liftIO (readProcess s [] "")
+  out <- liftIO (readProcess "/usr/bin/tdtool" [s, "1"] "")
   writeBS (C.pack out)
