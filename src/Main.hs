@@ -33,5 +33,5 @@ switch Off = switchAndPrint "--off"
 
 switchAndPrint :: MonadSnap m => String -> m ()
 switchAndPrint s = do
-  out <- liftIO (readProcess "/usr/bin/tdtool" [s, "1"] "")
+  out <- liftIO (readProcess "tdtool" [s, "1"] "")
   writeBS (C.pack out)
