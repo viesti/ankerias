@@ -45,7 +45,7 @@ getState = do
                          Nothing -> writeBS "error"
 
 matches :: String -> [[String]]
-matches = flip (=~) ("1[ ]*bataatti[ ]*(.*)" :: String)
+matches = flip (=~) ("1[ \t]*bataatti[ \t]*(.*)" :: String)
 
 parseState :: String -> Maybe String
 parseState input =
