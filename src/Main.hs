@@ -41,7 +41,13 @@ switchAndWrite s = do
 getState :: MonadSnap m => m ()
 getState = do
   (_, out, _) <- liftIO (readProcessWithExitCode "tdtool" ["--list"] "")
-  let pat = "1[ ]*bataatti[ ]*(.*)" :: String
-  case out =~ pat :: [[String]] of [[_,"OFF"]] -> writeBS "off"
-                                   [[_,"ON"]]  -> writeBS "on"
-                                   _           -> writeBS "error"
+  case parseState out of Just s  -> writeBS (C.pack s)
+                         Nothing -> writeBS "error"
+
+matches :: String -> [[String]]
+matches = flip (=~) ("1[ ]*bataatti[ ]*(.*)" :: String)
+
+parseState :: String -> Maybe String
+parseState input =
+    case filter (not . null) $ map matches (lines input) of [[[_, m]]] -> Just m
+                                                            _          -> Nothing
