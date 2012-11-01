@@ -1,8 +1,22 @@
-<html>
+<html ng-app>
   <head>
     <title>Ankerias</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="js/ankerias.js"></script>
+    <style>
+      .off { color: white; background-color: red; }
+      .on { color: black; background-color: green; }
+      #state {
+      padding: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -khtml-border-radius: 5px;
+      border-radius: 5px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Ankerias</h1>
+    Katkaisimen tila: <span id="state"></span>
+    <button id="button" type="button">Vaihda</button>
   </body>
 </html>
