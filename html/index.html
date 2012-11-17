@@ -1,23 +1,29 @@
-<html ng-app>
+<!DOCTYPE html>
+<html>
   <head>
     <base href="https://tiuhti.net/ankerias/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ankerias</title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="themes/ankerias.min.css" />
+    <link rel="stylesheet" href="themes/jquery.mobile.structure-1.2.0.min.css" />
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery.mobile-1.2.0.min.js"></script>
     <script src="js/ankerias.js"></script>
     <style>
-      .off { color: white; background-color: red; }
-      .on { color: black; background-color: green; }
-      #state {
-      padding: 5px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      -khtml-border-radius: 5px;
-      border-radius: 5px;
-      }
+      .on {color: green;}
+      .off {color: red;}
     </style>
   </head>
   <body>
-    Katkaisimen tila: <span id="state"></span>
-    <button id="button" type="button">Vaihda</button>
+    <div data-role="page" data-theme="a">
+      <div data-role="header" data-position="inline">
+	<h1>State:</h1>
+	<h1 id="state"></h1>
+      </div>
+      <div data-role="content" data-theme="a">
+	<button data-theme="a" id="button_on">Turn On</button>
+	<button data-theme="a" id="button_off">Turn Off</button>
+      </div>
+    </div>
   </body>
 </html>

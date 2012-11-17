@@ -1,27 +1,28 @@
 $(document).ready(function(){
+  $("#state").text(". . .");
   $.get('switch/state', function(data) {
-    $("#state").removeClass();
     if (data == "ON") {
+      $("#state").removeClass("off");
       $("#state").addClass("on");
-      $("#state").html("p&auml;&auml;ll&auml;");
+      $("#state").html("ON");
     } else {
+      $("#state").removeClass("on");
       $("#state").addClass("off");
-      $("#state").html("pois");
+      $("#state").html("OFF");
     }
   });
-  $("#button").click(function() {
-    if ($("#state").hasClass("on")) {
-      $.get('switch/off', function(date) {
-        $("#state").removeClass();
-        $("#state").addClass("off");
-        $("#state").html("pois");
-      });
-    } else {
-      $.get('switch/on', function(data) {
-        $("#state").removeClass();
-        $("#state").addClass("on");
-        $("#state").html("p&auml;&auml;ll&auml;");
-      });
-    }
+  $("#button_on").click(function() {
+    $.get('switch/on', function(data) {
+      $("#state").removeClass("off");
+      $("#state").addClass("on");
+      $("#state").html("ON");
+    });
+  });
+  $("#button_off").click(function() {
+    $.get('switch/off', function(data) {
+      $("#state").removeClass("on");
+      $("#state").addClass("off");
+      $("#state").html("OFF");
+    });
   });
 });

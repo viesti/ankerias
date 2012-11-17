@@ -17,7 +17,8 @@ site :: Snap ()
 site =
   ifTop (serveFile "html/index.html") <|>
   route [ ("switch/:state", switchHandler),
-          ("js/ankerias.js", serveFile "js/ankerias.js")] <|>
+          ("js", serveDirectory "js"),
+          ("themes", serveDirectory "themes")] <|>
   redirect' "/" 302
 
 switchHandler :: Snap ()
