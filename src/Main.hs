@@ -6,12 +6,17 @@ import           Control.Monad.Trans
 import           Snap.Core
 import           Snap.Util.FileServe
 import           Snap.Http.Server
-import           System.Process
-import qualified Data.ByteString.Char8 as C
-import           Text.Regex.TDFA
+import           Telldus
+import           Data.Bits((.|.))
+
+data SwitchState = On | Off
 
 main :: IO ()
-main = quickHttpServe site
+main = 
+  tdInit >>
+  quickHttpServe site >>
+  putStrLn "Cleaning up telldus-core" >>
+  tdClose
 
 site :: Snap ()
 site =
@@ -29,27 +34,17 @@ switchHandler = do
                 Just "state" -> getState
                 _ -> writeBS "error"
 
-data SwitchState = On | Off
-
 switch :: MonadSnap m => SwitchState -> m ()
-switch On = switchAndWrite "--on"
-switch Off = switchAndWrite "--off"
-
-switchAndWrite :: MonadSnap m => String -> m ()
-switchAndWrite s = do
-  (_, out, _) <- liftIO (readProcessWithExitCode "tdtool" [s, "1"] "")
-  writeBS (C.pack out)
+switch state = do
+  retVal <- liftIO $ case state of On -> tdTurnOn 1
+                                   Off -> tdTurnOff 1
+  case retVal of 0 -> writeBS "OK"
+                 _ -> writeBS "FAIL"
 
 getState :: MonadSnap m => m ()
 getState = do
-  (_, out, _) <- liftIO (readProcessWithExitCode "tdtool" ["--list"] "")
-  case parseState out of Just s  -> writeBS (C.pack s)
-                         Nothing -> writeBS "error"
-
-matches :: String -> [[String]]
-matches = flip (=~) ("1[ \t]*bataatti[ \t]*(.*)" :: String)
-
-parseState :: String -> Maybe String
-parseState input =
-    case filter (not . null) $ map matches (lines input) of [[[_, m]]] -> Just m
-                                                            _          -> Nothing
+  retVal <- liftIO $ tdLastSentCommand 1 (tellstick_turnon .|. tellstick_turnoff)
+  let result = case retVal of 1 -> "ON"
+                              2 -> "OFF"
+                              _ -> "UNKNOWN"
+  writeBS result
