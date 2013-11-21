@@ -1,3 +1,4 @@
 dist
 log
 .ghci
+.DS_Store
